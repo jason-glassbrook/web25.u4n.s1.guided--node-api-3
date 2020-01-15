@@ -1,20 +1,37 @@
-const express = require('express'); // importing a CommonJS module
+const express = require ('express')
 
-const hubsRouter = require('./hubs/hubs-router.js');
+const server = express ()
 
-const server = express();
+const routers = {
+  hubs : require ('./hubs/hubs-router'),
+  // messages : require ('./messages/messages-router'),
+}
 
-server.use(express.json());
+server.use (express.json ())
+server.use (logger)
+server.use (echo)
 
-server.use('/api/hubs', hubsRouter);
+server.use ('/api/hubs', routers.hubs)
 
-server.get('/', (req, res) => {
-  const nameInsert = (req.name) ? ` ${req.name}` : '';
+/***************************************
+  funs
+***************************************/
 
-  res.send(`
-    <h2>Lambda Hubs API</h2>
-    <p>Welcome${nameInsert} to the Lambda Hubs API</p>
-    `);
-});
+function logger (ri, ro, next) {
+  const { method, originalUrl } = ri
+  console.log (`request: ${method} ${originalUrl}`)
 
-module.exports = server;
+  next ()
+}
+
+function echo (ri, ro, next) {
+  const { body } = ri
+  console.log (`request body:`)
+  console.log (body)
+
+  next ()
+}
+
+/**************************************/
+
+module.exports = server
