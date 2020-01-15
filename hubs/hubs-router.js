@@ -141,13 +141,15 @@ function uppercaser (ri, ro, next) {
   next ()
 }
 
-function requireField (field) {
+function requireField (field, type = 'string') {
   return ((ri, ro, next) => {
-    if (ri.body[field] === undefined) {
+    const value = ri.body[field]
+
+    if (value === undefined || typeof value !== type) {
       ro
         .status (400)
         .json ({
-          error : `requires request.body like { ${field} }`,
+          error : `requires request.body like { ${field} : ${type} }`,
         })
     }
     else {
