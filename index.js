@@ -6,13 +6,19 @@ const routers = {
 }
 
 server.use (express.json ())
+server.use (logger)
 server.use ('/api/hubs', routers.hubs)
 
 server.listen (4000, () => {
   console.log ('\n* Server Running on http://localhost:4000 *\n')
 })
 
+/***************************************
+  funs
+***************************************/
 
-server.listen(4000, () => {
-  console.log('\n* Server Running on http://localhost:4000 *\n');
-});
+function logger (ri, ro, next) {
+  const { method, originalUrl } = ri
+  console.log (`request: ${method} ${originalUrl}`)
+  next ()
+}
