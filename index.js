@@ -5,6 +5,7 @@ const routers = {
   // messages : require ('./messages/messages-router'),
 }
 
+server.use (express.json ())
 server.use ('/api/hubs', routers.hubs)
 
 server.listen (4000, () => {
